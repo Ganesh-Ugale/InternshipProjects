@@ -59,7 +59,7 @@ public class LaptopApplication {
                             System.out.print("Enter Generation : ");
                             String generation = sc.nextLine();
 
-                            sc.nextLine();
+//                            sc.nextLine();
                             System.out.print("Enter Processor Name : ");
                             String processor = sc.nextLine();
 
@@ -68,7 +68,7 @@ public class LaptopApplication {
 
                             theLaptopDAO.save(new Laptop(brand, model, imie, memory,
                             storage, generation, processor, price));
-                            System.out.println("Laptop Saved Successfully!");
+                            System.out.println("Laptop Saved Successfully!\n");
 
                             System.out.print("\nDo you want to add more Laptops(y/n)? : ");
                             char ch = sc.next().toLowerCase().charAt(0);
@@ -86,11 +86,12 @@ public class LaptopApplication {
                         Laptop byID =  theLaptopDAO.findByID(sc.nextByte());
 
                         if (byID != null){
+                            System.out.println();
                             System.out.println(byID);
-                            System.out.println("Laptop Found!");
+                            System.out.println("Laptop Found!\n");
                         }
                         else {
-                            System.out.println("No Records Found!");
+                            System.out.println("\nNo Records Found!\n");
                         }
 
                         break;
@@ -102,10 +103,10 @@ public class LaptopApplication {
 
                         if (byIMIE != null){
                             System.out.println(byIMIE);
-                            System.out.println("Laptop Found!");
+                            System.out.println("\nLaptop Found!\n");
                         }
                         else {
-                            System.out.println("No Records Found!");
+                            System.out.println("\nNo Records Found!\n");
                         }
 
                         break;
@@ -114,12 +115,14 @@ public class LaptopApplication {
                     {
                         System.out.print("Enter the Laptop ID : ");
                         theLaptopDAO.update(sc.nextInt());
+                        System.out.println("Laptop Details Updated Successfully!\n");
                         break;
                     }
                     case 5:
                     {
                         System.out.print("Enter the Employee ID : ");
                         theLaptopDAO.remove(sc.nextInt());
+                        System.out.println("Laptop removed Successfully!\n");
                         break;
                     }
                     case 6:
@@ -127,7 +130,7 @@ public class LaptopApplication {
                         return;
                     }
                     default:{
-                        System.out.println("Please Select Right Option!");
+                        System.out.println("\nPlease Select Right Option!\n");
                     }
                 }
             }

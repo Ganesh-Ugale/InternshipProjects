@@ -34,7 +34,7 @@ public class LaptopDAOImpl implements LaptopDAO {
 
     @Override
     public Laptop findByIMIE(long imie) {
-        Query query = theManager.createQuery("select l from Laptop l where e.imie =: imie");
+        Query query = theManager.createQuery("select l from Laptop l where l.imie =: imie");
         query.setParameter("imie", imie);
         return (Laptop) query.getSingleResult();
     }
