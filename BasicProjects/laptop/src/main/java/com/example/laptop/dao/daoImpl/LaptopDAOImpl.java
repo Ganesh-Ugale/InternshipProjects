@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class LaptopDAOImpl implements LaptopDAO {
 
     private final EntityManager theManager;
-
+    private int size = 0;
     @Autowired
     public LaptopDAOImpl(EntityManager theManager){
         this.theManager = theManager;
@@ -24,6 +24,7 @@ public class LaptopDAOImpl implements LaptopDAO {
     @Override
     @Transactional
     public void save(Laptop theLaptop) {
+        size++;
         theManager.persist(theLaptop);
     }
 
@@ -34,14 +35,24 @@ public class LaptopDAOImpl implements LaptopDAO {
 
     @Override
     public Laptop findByIMIE(long imie) {
-        Query query = theManager.createQuery("select l from Laptop l where l.imie =: imie");
-        query.setParameter("imie", imie);
-        return (Laptop) query.getSingleResult();
+        try{
+            Query query = theManager.createQuery("select l from Laptop l where l.imie =: imie");
+            query.setParameter("imie", imie);
+            return (Laptop) query.getSingleResult();
+        }
+        catch (Exception o){
+            return null;
+        }
     }
 
     @Override
     @Transactional
     public void update(int id) {
+        if (size == 0){
+            System.out.println("\n Database is Empty!\n");
+            return;
+        }
+
         Scanner sc = new Scanner(System.in);
 
         Laptop isFound = theManager.find(Laptop.class,id);
@@ -167,12 +178,17 @@ public class LaptopDAOImpl implements LaptopDAO {
             default:{
                 System.out.println("Please Select Right Options!");
             }
+            System.out.println("Laptop Details Updated Successfully!\n");
         }
     }
 
     @Override
     @Transactional
     public void remove(int id) {
+        if (size == 0){
+            System.out.println("\nDatabase is Empty!\n");
+            return;
+        }
         Laptop found = theManager.find(Laptop.class,id);
 
         if (found  != null){
@@ -181,5 +197,6 @@ public class LaptopDAOImpl implements LaptopDAO {
         else{
             System.out.println("Laptop Not Found!");
         }
+        System.out.println("Laptop removed Successfully!\n");
     }
 }

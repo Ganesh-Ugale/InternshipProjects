@@ -115,14 +115,14 @@ public class LaptopApplication {
                     {
                         System.out.print("Enter the Laptop ID : ");
                         theLaptopDAO.update(sc.nextInt());
-                        System.out.println("Laptop Details Updated Successfully!\n");
+
                         break;
                     }
                     case 5:
                     {
                         System.out.print("Enter the Employee ID : ");
                         theLaptopDAO.remove(sc.nextInt());
-                        System.out.println("Laptop removed Successfully!\n");
+
                         break;
                     }
                     case 6:
