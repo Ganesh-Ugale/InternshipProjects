@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 @SpringBootApplication
@@ -21,7 +22,7 @@ public class LaptopApplication {
             System.out.println("\n------|| Welcome to Laptop Database Application ||-----\n");
 
             for (int j = 0; true; j++){
-                System.out.println("1. Add Laptop");
+                System.out.println("\n1. Add Laptop");
                 System.out.println("2. Fetch By ID");
                 System.out.println("3. Fetch By IMIE");
                 System.out.println("4. Update Laptop Details");
@@ -29,9 +30,24 @@ public class LaptopApplication {
                 System.out.println("6. Exit");
                 System.out.println();
 
-                System.out.print("Select Option : ");
-                int op = sc.nextByte();
-                sc.nextLine();
+                int attm = 3, op = 0;
+                for (int l = 0; l < 3; l++){
+                    try{
+                        System.out.print("Select Option : ");
+                        op = sc.nextByte();
+                        break;
+                    }
+                    catch (InputMismatchException e){
+                        System.out.println("\nAttempts Left " + --attm);
+                        System.out.println("Please Select from 1 to 5 Only!\n");
+                        sc.nextLine();
+                    }
+                }
+
+                if (attm == 0){
+                    System.out.println("Don't Come Again!\n");
+                    return;
+                }
 
                 switch (op){
                     case 1:
@@ -39,39 +55,63 @@ public class LaptopApplication {
                         for (int i = 0; true; i++){
                             System.out.println("\n-----|| Welcome to add Laptop page ||------\n");
 
-                            System.out.print("Enter brand name : ");
-                            String brand = sc.next();
+                            String brand = null, model = null, generation = null, processor = null;
+                            long imie = 0;
+                            int memory = 0, storage = 0;
+                            double price = 0;
+                            char ch = '\u0000';
+                            for (int c = 1; true; c++){
+                                try{
+                                    System.out.print("Enter brand name : ");
+                                    brand = sc.next();
 
-                            sc.nextLine();
-                            System.out.print("Enter model name : ");
-                            String model = sc.nextLine();
+                                    sc.nextLine();
+                                    System.out.print("Enter model name : ");
+                                    model = sc.nextLine();
 
-                            System.out.print("Enter IMIE number : ");
-                            long imie = sc.nextLong();
+                                    System.out.print("Enter IMIE number : ");
+                                    imie = sc.nextLong();
 
-                            System.out.print("Enter Memory(GB) : ");
-                            int memory = sc.nextInt();
+                                    System.out.print("Enter Memory(GB) : ");
+                                    memory = sc.nextInt();
 
-                            System.out.print("Enter Storage(GB) : ");
-                            int storage = sc.nextInt();
+                                    System.out.print("Enter Storage(GB) : ");
+                                    storage = sc.nextInt();
 
-                            sc.nextLine();
-                            System.out.print("Enter Generation : ");
-                            String generation = sc.nextLine();
+                                    sc.nextLine();
+                                    System.out.print("Enter Generation : ");
+                                    generation = sc.nextLine();
 
-//                            sc.nextLine();
-                            System.out.print("Enter Processor Name : ");
-                            String processor = sc.nextLine();
+                                    System.out.print("Enter Processor Name : ");
+                                    processor = sc.nextLine();
 
-                            System.out.print("Enter the Price : ");
-                            double price = sc.nextDouble();
+                                    System.out.print("Enter the Price : ");
+                                    price = sc.nextDouble();
 
-                            theLaptopDAO.save(new Laptop(brand, model, imie, memory,
-                            storage, generation, processor, price));
-                            System.out.println("Laptop Saved Successfully!\n");
+                                    theLaptopDAO.save(new Laptop(brand, model, imie, memory,
+                                            storage, generation, processor, price));
+                                    System.out.println("Laptop Saved Successfully!\n");
+
+                                    break;
+                                }
+                                catch (InputMismatchException e){
+                                    System.out.println("\nPlease Give Right Input!\n");
+                                    sc.nextLine();
+                                    System.out.print("Do you want go to Continue?(y/n) : ");
+                                    ch = sc.next().toLowerCase().charAt(0);
+                                    if (ch == 'n'){
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (ch == 'n'){
+                                ch = '\u0000';
+                                break;
+                            }
 
                             System.out.print("\nDo you want to add more Laptops(y/n)? : ");
-                            char ch = sc.next().toLowerCase().charAt(0);
+                            ch = sc.next().toLowerCase().charAt(0);
 
                             if (ch == 'n'){
                                 break;
@@ -82,8 +122,25 @@ public class LaptopApplication {
                     }
                     case 2:
                     {
-                        System.out.print("Enter the Laptop ID to Fetch by ID : ");
-                        Laptop byID =  theLaptopDAO.findByID(sc.nextByte());
+                        Laptop byID = null;
+                        int attmp = 3;
+                        for (int e = 0; e < 3; e++){
+                            try{
+                                System.out.print("Enter the Laptop ID to Fetch by ID : ");
+                                byID =  theLaptopDAO.findByID(sc.nextByte());
+                                break;
+                            }
+                            catch (InputMismatchException f){
+                                System.out.println("\nAttempts Left " + --attmp);
+                                System.out.println("Please Enter Laptop ID Only!\n");
+                                sc.nextLine();
+                            }
+
+                            if (attmp == 0){
+                                System.out.println("Don't Come Again!\n");
+                                return;
+                            }
+                        }
 
                         if (byID != null){
                             System.out.println();
@@ -98,8 +155,26 @@ public class LaptopApplication {
                     }
                     case 3:
                     {
-                        System.out.print("Enter the Laptop IMIE to Fetch by IMIE : ");
-                        Laptop byIMIE =  theLaptopDAO.findByIMIE(sc.nextLong());
+                        Laptop byIMIE = null;
+                        int attmp = 3;
+                        for (int e = 0; e < 3; e++){
+                            try{
+                                System.out.print("Enter the Laptop IMIE to Fetch by IMIE : ");
+                                byIMIE =  theLaptopDAO.findByIMIE(sc.nextLong());
+
+                                break;
+                            }
+                            catch (InputMismatchException f){
+                                System.out.println("\nAttempts Left " + --attmp);
+                                System.out.println("Please Enter Valid IMEI!\n");
+                                sc.nextLine();
+                            }
+
+                            if (attmp == 0){
+                                System.out.println("Don't Come Again!\n");
+                                return;
+                            }
+                        }
 
                         if (byIMIE != null){
                             System.out.println(byIMIE);
@@ -113,16 +188,44 @@ public class LaptopApplication {
                     }
                     case 4:
                     {
-                        System.out.print("Enter the Laptop ID : ");
-                        theLaptopDAO.update(sc.nextInt());
+                        int attmp = 3;
+                        for (int e = 0; e < 3; e++) {
+                            try {
+                                System.out.print("Enter the Laptop ID : ");
+                                theLaptopDAO.update(sc.nextInt());
+                                break;
+                            } catch (InputMismatchException f) {
+                                System.out.println("\nAttempts Left " + --attmp);
+                                System.out.println("Please Enter Valid Laptop ID!\n");
+                                sc.nextLine();
+                            }
 
+                            if (attmp == 0) {
+                                System.out.println("Don't Come Again!\n");
+                                return;
+                            }
+                        }
                         break;
                     }
                     case 5:
                     {
-                        System.out.print("Enter the Employee ID : ");
-                        theLaptopDAO.remove(sc.nextInt());
+                        int attmp = 3;
+                        for (int e = 0; e < 3; e++) {
+                            try {
+                                System.out.print("Enter the Laptop ID : ");
+                                theLaptopDAO.remove(sc.nextInt());
+                                break;
+                            } catch (InputMismatchException f) {
+                                System.out.println("\nAttempts Left " + --attmp);
+                                System.out.println("Please Enter Valid Laptop ID!\n");
+                                sc.nextLine();
+                            }
 
+                            if (attmp == 0) {
+                                System.out.println("Don't Come Again!\n");
+                                return;
+                            }
+                        }
                         break;
                     }
                     case 6:

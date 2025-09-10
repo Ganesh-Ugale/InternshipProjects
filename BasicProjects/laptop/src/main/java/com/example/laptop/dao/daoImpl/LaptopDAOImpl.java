@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.swing.text.html.parser.Entity;
+import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 @Repository
@@ -16,15 +18,16 @@ public class LaptopDAOImpl implements LaptopDAO {
 
     private final EntityManager theManager;
     private int size = 0;
+
     @Autowired
     public LaptopDAOImpl(EntityManager theManager){
         this.theManager = theManager;
+        size = size();
     }
 
     @Override
     @Transactional
     public void save(Laptop theLaptop) {
-        size++;
         theManager.persist(theLaptop);
     }
 
@@ -57,7 +60,7 @@ public class LaptopDAOImpl implements LaptopDAO {
 
         Laptop isFound = theManager.find(Laptop.class,id);
 
-        System.out.println("1. Update Brand Name");
+        System.out.println("\n1. Update Brand Name");
         System.out.println("2. Update Model Name");
         System.out.println("3. Update IMIE");
         System.out.println("4. Update Memory");
@@ -65,11 +68,22 @@ public class LaptopDAOImpl implements LaptopDAO {
         System.out.println("6. Update Generation");
         System.out.println("7. Update Processor");
         System.out.println("8. Update Price");
+        System.out.println("9. Exit");
         System.out.println();
 
-        System.out.print("Select Option : ");
-        int op = sc.nextByte();
-
+        int attm = 3, op = 0;
+        for (int l = 0; l < 3; l++){
+            try{
+                System.out.print("Select Option : ");
+                op = sc.nextByte();
+                break;
+            }
+            catch (InputMismatchException e){
+                System.out.println("\nAttempts Left " + --attm);
+                System.out.println("Please Select from 1 to 5 Only!\n");
+                sc.nextLine();
+            }
+        }
         switch (op){
             case 1:
             {
@@ -198,5 +212,17 @@ public class LaptopDAOImpl implements LaptopDAO {
             System.out.println("Laptop Not Found!");
         }
         System.out.println("Laptop removed Successfully!\n");
+    }
+
+//    Fetch the all records from DB
+    private List<Laptop> fetchAll() {
+        Query query = theManager.createQuery("select l from Laptop l");
+        return query.getResultList();
+    }
+
+    //    To Fetch the size of DB
+    private int size(){
+        List<Laptop> temp = fetchAll();
+        return temp.size();
     }
 }
