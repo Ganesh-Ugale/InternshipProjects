@@ -44,7 +44,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         for (int i = 0; true; i++){
             System.out.println("\n----|| Welcome to Display Menu ||----\n");
 
-            System.out.println("1. Fetch by UNIC ID");
+            System.out.println("1. Fetch by Unique ID");
             System.out.println("2. Fetch by First Name");
             System.out.println("3. Fetch by Last Name");
             System.out.println("4. Fetch by Contact Info");
